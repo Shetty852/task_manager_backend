@@ -6,21 +6,27 @@ const cors = require('cors');
 const taskRoutes = require('./routes/tasks');
 
 const app = express();
-app.use(cors());
+
+app.use(cors({
+  origin: 'https://task-manager-gtinjccv4-rohans-projects-845bc57f.vercel.app', // replace this with your actual deployed frontend URL
+  credentials: true
+}));
+
 app.use(express.json());
 
-// Connect to MongoDB Atlas using .env variable
+// ✅ Connect to MongoDB Atlas using environment variable
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
-.then(() => console.log("Connected to MongoDB Atlas"))
-.catch(err => console.error("MongoDB connection error:", err));
+.then(() => console.log("✅ Connected to MongoDB Atlas"))
+.catch(err => console.error("❌ MongoDB connection error:", err));
 
-// Routes
-app.use('/api/tasks', taskRoutes);  //this name is used test in postman like this (http://localhost:5000/api/tasks)
+// ✅ Routes
+app.use('/api/tasks', taskRoutes);
 
-// Start server
-app.listen(5000, () => {
-  console.log("Server running on http://localhost:5000");
+// ✅ Correct Port for Render (or fallback to 5000 for local testing)
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`✅ Server running on port ${PORT}`);
 });
